@@ -11,9 +11,10 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('items', ['items' => Item::all()]);
+        $perpage = $request->perpage ?? 2;
+        return view('items', ['items' => Item::paginate($perpage)->withQueryString()]);
     }
 
     /**
