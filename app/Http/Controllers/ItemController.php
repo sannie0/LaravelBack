@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category_Product;
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ItemController extends Controller
 {
@@ -82,6 +83,10 @@ class ItemController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        if (!Gate::allows('destroy-item', Item::all()->where('id', $id)->first())){
+            return redirect('/error')->with('message', 'У вас нет прав удалить товар номер ' .$id);
+        }
+        Item::destroy($id);
+        return redirect('/item');
     }
 }

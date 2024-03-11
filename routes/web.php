@@ -35,3 +35,21 @@ Route::post('/item', [\App\Http\Controllers\ItemController::class, 'store']);
 Route::get('/item/edit/{id}', [\App\Http\Controllers\ItemController::class, 'edit']);
 
 Route::post('/item/update/{id}', [\App\Http\Controllers\ItemController::class, 'update']);
+
+Route::get('/login', [\App\Http\Controllers\LoginController::class, 'login']);
+
+Route::get('/logout', [\App\Http\Controllers\LoginController::class, 'logout']);
+
+Route::post('/auth', [\App\Http\Controllers\LoginController::class, 'authenticate'])->name('auth');
+
+Route::get('/login', [\App\Http\Controllers\LoginController::class, 'login'])->name('login');
+
+Route::get('/item/create', [\App\Http\Controllers\ItemController::class, 'create'])->middleware('auth');//защита middleware
+
+Route::get('/item/edit/{id}', [\App\Http\Controllers\ItemController::class, 'edit'])->middleware('auth');
+
+Route::post('/item/update/{id}', [\App\Http\Controllers\ItemController::class, 'update'])->middleware('auth');
+
+Route::get('/item/destroy/{id}', [\App\Http\Controllers\ItemController::class, 'destroy'])->middleware('auth');
+
+Route::get('/error', function (){return view('error', ['message' => session('message')]);});
