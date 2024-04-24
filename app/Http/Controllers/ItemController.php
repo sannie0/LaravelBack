@@ -6,6 +6,7 @@ use App\Models\Category_Product;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -23,7 +24,9 @@ class ItemController extends Controller
      */
     public function create()
     {
-        return view('item_create_view', ['categories' => Category_Product::all()]);
+        $user = Auth::user();
+        return view('item_create_view', ['categories' => Category_Product::all(), 'user' => $user]);
+        //return view('item_create_view', ['categories' => Category_Product::all()]);
     }
 
     /**
@@ -81,12 +84,18 @@ class ItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id)//
     {
-        if (!Gate::allows('destroy-item', Item::all()->where('id', $id)->first())){
-            return redirect('/error')->with('message', 'У вас нет прав удалить товар номер ' .$id);
+        /*if (!Gate::allows('destroy-item', Item::all()->where('id', $id)->first())){
+            return ('/error')->with('message', 'Для удаления товара номер ' .$id. ', нужны права администратора');
         }
         Item::destroy($id);
-        return redirect('/item');
+        return redirect('/item');*/
+        if (!Gate::allows('destroy-item', Item::all()->where('id', $id)->first())){
+            return back()->withErrors(['error' => 'Для удаления товара номер ' .$id. ', нужны права администратора']);
+        }
+        $item_name = Item::find($id);
+        Item::destroy($id);
+        return redirect('/item')->withErrors(['success'=>'Товар "' .$item_name->name. '" успешно удален']);;
     }
 }

@@ -48,8 +48,8 @@ Route::get('/item/create', [\App\Http\Controllers\ItemController::class, 'create
 
 Route::get('/item/edit/{id}', [\App\Http\Controllers\ItemController::class, 'edit'])->middleware('auth');
 
-Route::post('/item/update/{id}', [\App\Http\Controllers\ItemController::class, 'update'])->middleware('auth');
-
 Route::get('/item/destroy/{id}', [\App\Http\Controllers\ItemController::class, 'destroy'])->middleware('auth');
+
+Route::get('/item/update/{id}', [\App\Http\Controllers\ItemController::class, 'update'])->middleware('auth');
 
 Route::get('/error', function (){return view('error', ['message' => session('message')]);});
