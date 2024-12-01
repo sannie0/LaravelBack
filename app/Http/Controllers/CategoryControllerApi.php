@@ -5,14 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category_Product;
 
+
 class CategoryControllerApi extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response(Category_Product::all());
+        return response()->json([Category_Product::limit($request->perpage ?? 5) //добавление обработки страниц
+        ->offset(($request->perpage ?? 5) * ($request->page ?? 0))
+        ->get()]);
+        //return response(Category_Product::all());
+    }
+
+    public function total()//получение общего количества записей БД
+    {
+        return response()->json([Category_Product::all()->count()]);
     }
 
     /**

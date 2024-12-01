@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category_Product;
 use App\Models\Item;
 use Illuminate\Http\Request;
 
@@ -10,9 +11,17 @@ class ItemControllerApi extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response(Item::all());
+        return response()->json([Item::limit($request->perpage ?? 5) //добавление обработки страниц
+        ->offset(($request->perpage ?? 5) * ($request->page ?? 0))
+            ->get()]);
+        //return response(Item::all());
+    }
+
+    public function total()//получение общего количества записей БД
+    {
+        return response()->json([Item::all()->count()]);
     }
 
     /**
@@ -46,4 +55,5 @@ class ItemControllerApi extends Controller
     {
         //
     }
+
 }
