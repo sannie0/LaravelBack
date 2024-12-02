@@ -16,12 +16,15 @@ class ItemControllerApi extends Controller
         return response()->json([Item::limit($request->perpage ?? 5) //добавление обработки страниц
         ->offset(($request->perpage ?? 5) * ($request->page ?? 0))
             ->get()]);
-        //return response(Item::all());
+        /*return response(Item::all());
+        $items = Item::paginate($request->input('perpage', 5));
+        return response()->json($items);-*/
     }
 
     public function total()//получение общего количества записей БД
     {
-        return response()->json([Item::all()->count()]);
+       return response()->json([Item::all()->count()]);
+        //return response()->json(['total' => Item::count()]);
     }
 
     /**

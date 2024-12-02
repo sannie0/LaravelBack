@@ -29,7 +29,43 @@ class CategoryControllerApi extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (!Gate::allows('create-category')) {// Проверка прав на добавление категории
+            return response()->json([
+                'code' => 1,
+                'message' => 'У вас нет прав на добавление категории',
+            ]);
+        }
+        $validated = $request->validate([// Валидация входных данных
+            'name'  => 'required|unique:categories|max:255',
+            'image' => 'required|file',
+        ]);
+
+        // Обработка загружаемого файла
+        try {
+            $file = $request->file('image');
+            $fileName = rand(1, 100000) . '_' . $file->getClientOriginalName();
+
+            // Загрузка файла в хранилище S3
+            $path = Storage::disk('s3')->putFileAs('category_pictures', $file, $fileName);
+
+            // Получение URL загруженного файла
+            $fileUrl = Storage::disk('s3')->url($path);
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 2,
+                'message' => 'Ошибка загрузки файла в хранилище S3',
+            ]);
+        }
+
+        // Создание новой категории
+        $category = new Category_Product($validated);
+        $category->picture_url = $fileUrl;
+        $category->save();
+
+        return response()->json([
+            'code' => 0,
+            'message' => 'Категория успешно добавлена',
+        ]);
     }
 
     /**

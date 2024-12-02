@@ -35,7 +35,7 @@ Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
 //Route::middleware('auth:sanctum')->get('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
 
 Route::middleware('auth:sanctum')->group(function () {//защищенные маршруты
-    Route::get('/item', [\App\Http\Controllers\ItemControllerApi::class, 'index']);
+    //Route::get('/item', [\App\Http\Controllers\ItemControllerApi::class, 'index']); убрала из защищенного маршрута
     Route::get('/user', function(Request $request) {
         return $request->user();
     });
@@ -43,5 +43,11 @@ Route::middleware('auth:sanctum')->group(function () {//защищенные м�
     Route::get('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
 });
 
+Route::get('/item', [\App\Http\Controllers\ItemControllerApi::class, 'index']);
+
+//dataStore
 Route::get('/categories_total', [\App\Http\Controllers\CategoryControllerApi::class, 'total']);
-Route::get('/items_total', [\App\Http\Controllers\ItemControllerApi::class, 'items']);
+Route::get('/items_total', [\App\Http\Controllers\ItemControllerApi::class, 'total']);
+
+//Yacloud
+//Route::post('/category', [\App\Http\Controllers\CategoryControllerApi::class, 'store']);
