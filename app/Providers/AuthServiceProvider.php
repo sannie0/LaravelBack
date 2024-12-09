@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
-namespace App\Providers;
-
 // use Illuminate\Support\Facades\Gate;
+use App\Models\Item;
+use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Pagination\Paginator;
 
 
 class AuthServiceProvider extends ServiceProvider
@@ -24,22 +26,16 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        /*Paginator::defaultView('pagination::default');
-
-        Gate::define('destroy-session', function (User $user, Session $session) {
-            return $user->is_admin or $session->created_at < Carbon::now()->subHour();
-        });
         $this->registerPolicies();
         Paginator::defaultView('pagination::bootstrap-4');
 
-        Gate::define('destroy-service', function (User $user, Service $service) {
-            return
-                $user->is_admin OR
-                $service->price < 1000;
+        $gate = app(Gate::class);
+        $gate->define('destroy-service', function (User $user, Item $service) {
+            return $user->is_admin || $service->price < 1000;
         });
 
-        Gate::define('create-service', function (User $user) {
+        $gate->define('create-service', function (User $user) {
             return true;
-        });*/
+        });
     }
 }

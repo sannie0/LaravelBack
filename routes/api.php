@@ -39,7 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {//защищенные м�
     Route::get('/user', function(Request $request) {
         return $request->user();
     });
-
+    //Route::post('/category', [\App\Http\Controllers\CategoryControllerApi::class, 'store']);//Yacloud
     Route::get('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
 });
 
@@ -49,5 +49,5 @@ Route::get('/item', [\App\Http\Controllers\ItemControllerApi::class, 'index']);
 Route::get('/categories_total', [\App\Http\Controllers\CategoryControllerApi::class, 'total']);
 Route::get('/items_total', [\App\Http\Controllers\ItemControllerApi::class, 'total']);
 
-//Yacloud
-//Route::post('/category', [\App\Http\Controllers\CategoryControllerApi::class, 'store']);
+
+Route::post('/category', [\App\Http\Controllers\CategoryControllerApi::class, 'store']);//Yacloud
