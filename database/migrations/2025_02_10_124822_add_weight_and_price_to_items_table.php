@@ -1,15 +1,18 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class AddColumnsToItemsTable extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
         Schema::table('items', function (Blueprint $table) {
-            // Добавляем столбцы только если они не существуют
             if (!Schema::hasColumn('items', 'weight')) {
                 $table->bigInteger('weight')->unsigned()->notNull();
             }
@@ -20,10 +23,14 @@ class AddColumnsToItemsTable extends Migration
         });
     }
 
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down()
     {
         Schema::table('items', function (Blueprint $table) {
-            // Убираем столбцы, если они существуют
             if (Schema::hasColumn('items', 'weight')) {
                 $table->dropColumn('weight');
             }
@@ -34,4 +41,5 @@ class AddColumnsToItemsTable extends Migration
         });
     }
 }
+
 
