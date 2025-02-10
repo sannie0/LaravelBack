@@ -61,13 +61,18 @@ class CategoryControllerApi extends Controller
                 throw new Exception('Не удалось загрузить файл в хранилище.');
             }
             // Получение URL загруженного файла
+            Storage::disk('s3')->setVisibility($path, 'public');
             $fileUrl = Storage::disk('s3')->url($path);
         }
-        catch (Exception $e) {
+        /*catch (Exception $e) {
             return response()->json([
                 'code' => 2,
                 'message' => 'Ошибка загрузки файла в хранилище S3 - ' . $e->getMessage(),
             ]);
+        };*/
+        catch (Exception $e){
+        return response()->json(['message' => 'Error uploading file to S3: ',
+            'error' => ['code' => $e->getCode(), 'message'=> $e->getMessage()]], 500);
         };
 
         // Создание новой категории
